@@ -68,8 +68,8 @@ class InputHelper(object):
     def get_train_data(self):
 
         """Read the train.csv file and convert it in a vocabulary and numbers that represents
-        each word and returns all questions in arrays with numbers inside, together with questions
-          we are returning the if the question has or not a duplicate meaning """
+           each word and returns all questions in arrays with numbers inside, together with questions
+           we are returning the if the question has or not a duplicate meaning """
 
         print("Reading CSV files")
 
@@ -96,6 +96,11 @@ class InputHelper(object):
         return questions1, questions2, is_duplicate
 
     def get_test_data(self):
+
+        """Read the test.csv file and convert it in a vocabulary and numbers that represents
+           each word and returns all questions in arrays with numbers inside"""
+
+        print("Reading CSV files")
 
         df_test = pd.read_csv(self.path_test, skipinitialspace=True, usecols=self.field_test)
 
