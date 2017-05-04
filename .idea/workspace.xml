@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="57112390-09fd-45d7-9976-95972359adae" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/input_files.py" afterPath="$PROJECT_DIR$/input_files.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/neural_network.py" afterPath="$PROJECT_DIR$/neural_network.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/train_neural_network.py" afterPath="$PROJECT_DIR$/train_neural_network.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -16,27 +16,26 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="input_files.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="input_files.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/input_files.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="65" column="44" lean-forward="false" selection-start-line="65" selection-start-column="44" selection-end-line="65" selection-end-column="44" />
+            <state relative-caret-position="56">
+              <caret line="102" column="34" lean-forward="false" selection-start-line="102" selection-start-column="34" selection-end-line="102" selection-end-column="34" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
                 <element signature="e#453#988#0" expanded="false" />
                 <element signature="e#1031#1480#0" expanded="false" />
                 <element signature="e#1522#1966#0" expanded="false" />
-                <element signature="e#2007#3150#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="train_neural_network.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="train_neural_network.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/train_neural_network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="32" />
+            <state relative-caret-position="80">
+              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -47,10 +46,10 @@
       <file leaf-file-name="neural_network.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/neural_network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+            <state relative-caret-position="64">
+              <caret line="4" column="17" lean-forward="true" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="23" />
               <folding>
-                <element signature="e#0#32#0" expanded="true" />
+                <element signature="e#0#23#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -92,9 +91,9 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/train_nn" />
         <option value="$PROJECT_DIR$/train_neural_network" />
-        <option value="$PROJECT_DIR$/train_neural_network.py" />
         <option value="$PROJECT_DIR$/input_files.py" />
         <option value="$PROJECT_DIR$/neural_network.py" />
+        <option value="$PROJECT_DIR$/train_neural_network.py" />
       </list>
     </option>
   </component>
@@ -342,7 +341,6 @@
             <element signature="e#453#988#0" expanded="false" />
             <element signature="e#1031#1480#0" expanded="false" />
             <element signature="e#1522#1966#0" expanded="false" />
-            <element signature="e#2007#3150#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -374,7 +372,6 @@
             <element signature="e#453#988#0" expanded="false" />
             <element signature="e#1031#1480#0" expanded="false" />
             <element signature="e#1522#1966#0" expanded="false" />
-            <element signature="e#2007#3150#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -406,7 +403,6 @@
             <element signature="e#453#988#0" expanded="false" />
             <element signature="e#1031#1480#0" expanded="false" />
             <element signature="e#1522#1966#0" expanded="false" />
-            <element signature="e#2007#3150#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -438,7 +434,6 @@
             <element signature="e#453#988#0" expanded="false" />
             <element signature="e#1031#1480#0" expanded="false" />
             <element signature="e#1522#1966#0" expanded="false" />
-            <element signature="e#2007#3150#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -470,7 +465,6 @@
             <element signature="e#453#988#0" expanded="false" />
             <element signature="e#1031#1480#0" expanded="false" />
             <element signature="e#1522#1966#0" expanded="false" />
-            <element signature="e#2007#3150#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -494,7 +488,6 @@
             <element signature="e#453#988#0" expanded="false" />
             <element signature="e#1031#1480#0" expanded="false" />
             <element signature="e#1522#1966#0" expanded="false" />
-            <element signature="e#2007#3150#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -525,26 +518,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train_neural_network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/neural_network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="112">
@@ -555,16 +528,51 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/rnn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="736" column="4" lean-forward="false" selection-start-line="736" selection-start-column="4" selection-end-line="736" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/lib/python2.7/dist-packages/tensorflow/python/ops/rnn_cell_impl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="83" column="0" lean-forward="false" selection-start-line="83" selection-start-column="0" selection-end-line="83" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/neural_network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="4" column="17" lean-forward="true" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/input_files.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="65" column="44" lean-forward="false" selection-start-line="65" selection-start-column="44" selection-end-line="65" selection-end-column="44" />
+        <state relative-caret-position="56">
+          <caret line="102" column="34" lean-forward="false" selection-start-line="102" selection-start-column="34" selection-end-line="102" selection-end-column="34" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
             <element signature="e#453#988#0" expanded="false" />
             <element signature="e#1031#1480#0" expanded="false" />
             <element signature="e#1522#1966#0" expanded="false" />
-            <element signature="e#2007#3150#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_neural_network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
