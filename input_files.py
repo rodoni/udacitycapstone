@@ -98,7 +98,7 @@ class InputHelper(object):
     def get_test_data(self):
 
         """Read the test.csv file and convert it in a vocabulary and numbers that represents
-           each word and returns all questions in arrays with numbers inside"""
+           each word and returns all questions in arrays with numbers inside """
 
         print("Reading CSV files")
 
