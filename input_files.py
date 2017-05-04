@@ -1,6 +1,15 @@
 import pandas as pd
 import numpy as np
 from tensorflow.contrib import learn
+import re
+
+TOKENIZER_RE = re.compile(r"[A-Z]{2,}(?![a-z])|[A-Z][a-z]+(?=[A-Z])|[\'\w\-]+",
+                          re.UNICODE)
+
+
+def tokenizer(iterator):
+    for value in iterator:
+        yield list(value)
 
 
 class InputHelper(object):
@@ -24,7 +33,7 @@ class InputHelper(object):
 
     def get_size_q_train(self):
 
-        df_train = pd.read_csv(self.path_train, skipinitialspace=True,usecols=self.field_train)
+        df_train = pd.read_csv(self.path_train, skipinitialspace=True, usecols=self.field_train)
 
         size_max_q1 = 0
         size_max_q2 = 0
@@ -56,28 +65,55 @@ class InputHelper(object):
 
         return max(size_max_q1, size_max_q2)
 
-    def get_voc_process(self):
-        voc_process = learn.preprocessing.VocabularyProcessor(max(self.get_size_q_test(), self.get_size_q_train()),
-                                                              min_frequency=0)
-        return voc_process
-
     def get_train_data(self):
 
+        """Read the train.csv file and convert it in a vocabulary and numbers that represents
+        each word and returns all questions in arrays with numbers inside, together with questions
+          we are returning the if the question has or not a duplicate meaning """
+
+        print("Reading CSV files")
+
         df_train = pd.read_csv(self.path_train, skipinitialspace=True, usecols=self.field_train)
-        voc_pr = self.get_voc_process()
-        voc_pr.fit_transform(np.concatenate((np.array(df_train['question1'].tolist()),
-                                             np.array(df_train['question2'].tolist())), axis=0))
 
-        print(voc_pr.vocabulary_.__len__())
+        print("Creating Vocabulary Pre Processor")
+        voc_pr = learn.preprocessing.VocabularyProcessor(int(max(self.get_size_q_train(), self.get_size_q_test())))
 
-       # print(lista)
+        questions_1 = df_train['question1'].tolist()
+        questions_2 = df_train['question2'].tolist()
+        questions = pd.concat([df_train['question1'].dropna(), df_train['question2'].dropna()])
 
-        return df_train
+        voc_pr.fit(questions)
+
+        print("Size of vocabulary loaded = {}".format(len(voc_pr.vocabulary_)))
+
+        questions1 = voc_pr.transform(questions_1)
+        questions2 = voc_pr.transform(questions_2)
+
+        is_duplicate = np.array(df_train['is_duplicate'].tolist())
+
+        print("Vocabulary parsed")
+
+        return questions1, questions2, is_duplicate
 
     def get_test_data(self):
 
         df_test = pd.read_csv(self.path_test, skipinitialspace=True, usecols=self.field_test)
-        voc_pr = self.get_voc_process()
-        voc_pr.transform(np.concatenate(df_test['question1'].values, df_test['question2'].values))
-        return df_test
+
+        print("Creating Vocabulary Pre Processor")
+        voc_pr = learn.preprocessing.VocabularyProcessor(int(max(self.get_size_q_train(), self.get_size_q_test())))
+
+        questions_1 = df_test['question1'].tolist()
+        questions_2 = df_test['question2'].tolist()
+        questions = pd.concat([df_test['question1'].dropna(), df_test['question2'].dropna()])
+
+        voc_pr.fit(questions)
+
+        print("Size of vocabulary loaded = {}".format(len(voc_pr.vocabulary_)))
+
+        questions1 = voc_pr.transform(questions_1)
+        questions2 = voc_pr.transform(questions_2)
+
+        print("Vocabulary parsed")
+
+        return questions1, questions2
 
