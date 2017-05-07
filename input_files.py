@@ -70,13 +70,14 @@ class InputHelper(object):
         """Read the train.csv file and convert it in a vocabulary and numbers that represents
            each word and returns all questions in arrays with numbers inside, together with questions
            we are returning the if the question has or not a duplicate meaning """
+        max_document_size = int(max(self.get_size_q_train(), self.get_size_q_test()))
 
         print("Reading CSV files")
 
         df_train = pd.read_csv(self.path_train, skipinitialspace=True, usecols=self.field_train)
 
         print("Creating Vocabulary Pre Processor")
-        voc_pr = learn.preprocessing.VocabularyProcessor(int(max(self.get_size_q_train(), self.get_size_q_test())))
+        voc_pr = learn.preprocessing.VocabularyProcessor(max_document_size)
 
         questions_1 = df_train['question1'].tolist()
         questions_2 = df_train['question2'].tolist()
@@ -93,7 +94,7 @@ class InputHelper(object):
 
         print("Vocabulary parsed")
 
-        return questions1, questions2, is_duplicate
+        return questions1, questions2, is_duplicate, len(voc_pr.vocabulary_), max_document_size
 
     def get_test_data(self):
 
