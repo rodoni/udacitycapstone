@@ -14,7 +14,7 @@ class TrainNeuralNetworkSiamese(object):
 
     def train_nn(self):
 
-        r_nn = NeuralNetworkLSTM(self.max_doc_size, self.vocab_size, self.max_doc_size)
+        r_nn = NeuralNetworkLSTM(self.max_doc_size, self.vocab_size, (self.max_doc_size*10))
         i_questions_1 = iter(self.questions_1)
         i_questions_2 = iter(self.questions_2)
         i_is_duplicate = iter(self.is_duplicated)
@@ -23,7 +23,8 @@ class TrainNeuralNetworkSiamese(object):
         feed_dict = {
             r_nn.question_1: i_questions_1.next(),
             r_nn.question_2: i_questions_2.next(),
-            r_nn.is_duplicate: i_is_duplicate.next
+            r_nn.is_duplicate: i_is_duplicate.next(),
+            r_nn.dropout_keep_prob: 0.5
         }
 
         sess.run([r_nn.run_siamese_network()], feed_dict)
