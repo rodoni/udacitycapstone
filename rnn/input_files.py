@@ -19,7 +19,7 @@ class InputHelper(object):
     path_test = ''
     path_train = ' '
 
-    def __init__(self, path_test, path_train):
+    def __init__(self, path_test, path_train, max_question_size):
 
         # id - the id of a training set question pair
         # qid1, qid2 - unique ids of each question (only available in train.csv)
@@ -30,54 +30,39 @@ class InputHelper(object):
         self.field_test = ['test_id', 'question1', 'question2']
         self.path_test = path_test
         self.path_train = path_train
+        self.max_question_size = max_question_size
 
-    def get_size_q_train(self):
+    def get_doc_train(self):
 
         df_train = pd.read_csv(self.path_train, skipinitialspace=True, usecols=self.field_train)
+        mask = ((df_train['question1'].str.len() <= self.max_question_size) &
+                (df_train['question2'].str.len() < self.max_question_size))
+        df_train = df_train.loc[mask]
 
-        size_max_q1 = 0
-        size_max_q2 = 0
+        return df_train
 
-        for size_q1 in df_train['question1'].str.len():
-            if size_q1 > size_max_q1:
-                size_max_q1 = size_q1
-
-        for size_q2 in df_train['question2'].str.len():
-            if size_q2 > size_max_q2:
-                size_max_q2 = size_q2
-
-        return max(size_max_q1, size_max_q2)
-
-    def get_size_q_test(self):
+    def get_doc_test(self):
 
         df_test = pd.read_csv(self.path_test, skipinitialspace=True, usecols=self.field_test)
+        mask = ((df_test['question1'].str.len() <= self.max_question_size) &
+                (df_test['question2'].str.len() <= self.max_question_size))
+        df_test = df_test.loc[mask]
 
-        size_max_q1 = 0
-        size_max_q2 = 0
-
-        for size_q1 in df_test['question1'].str.len():
-            if size_q1 > size_max_q1:
-                size_max_q1 = size_q1
-
-        for size_q2 in df_test['question2'].str.len():
-            if size_q2 > size_max_q2:
-                size_max_q2 = size_q2
-
-        return max(size_max_q1, size_max_q2)
+        return df_test
 
     def get_train_data(self):
 
         """Read the train.csv file and convert it in a vocabulary and numbers that represents
            each word and returns all questions in arrays with numbers inside, together with questions
            we are returning the if the question has or not a duplicate meaning """
-        max_document_size = int(max(self.get_size_q_train(), self.get_size_q_test()))
+
+        print("Max Document Size = {}".format(self.max_question_size))
 
         print("Reading CSV files")
-
-        df_train = pd.read_csv(self.path_train, skipinitialspace=True, usecols=self.field_train)
+        df_train = self.get_doc_train()
 
         print("Creating Vocabulary Pre Processor")
-        voc_pr = learn.preprocessing.VocabularyProcessor(max_document_size)
+        voc_pr = learn.preprocessing.VocabularyProcessor(self.max_question_size)
 
         questions_1 = df_train['question1'].tolist()
         questions_2 = df_train['question2'].tolist()
@@ -94,7 +79,7 @@ class InputHelper(object):
 
         print("Vocabulary parsed")
 
-        return questions1, questions2, is_duplicate, len(voc_pr.vocabulary_), max_document_size
+        return questions1, questions2, is_duplicate, len(voc_pr.vocabulary_), self.max_question_size
 
     def get_test_data(self):
 
@@ -103,7 +88,7 @@ class InputHelper(object):
 
         print("Reading CSV files")
 
-        df_test = pd.read_csv(self.path_test, skipinitialspace=True, usecols=self.field_test)
+        df_test = self.get_doc_test()
 
         print("Creating Vocabulary Pre Processor")
         voc_pr = learn.preprocessing.VocabularyProcessor(int(max(self.get_size_q_train(), self.get_size_q_test())))
