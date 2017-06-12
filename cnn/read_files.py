@@ -77,7 +77,7 @@ class InputFileReader(object):
 
             index = index + 1
 
-        return activit_data, weather_data
+        return activit_data, weather_data, index
 
 
 
