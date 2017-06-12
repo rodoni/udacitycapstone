@@ -1,9 +1,8 @@
 import read_files as rf
 import read_images as ri
 import sys
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 import numpy as np
+from keras.models import Sequential
 
 
 path_to_files = sys.argv[1]
@@ -26,5 +25,10 @@ activity_data, weather_data, index = read_file.get_data()
 print ("Max Index : "+str(index))
 
 read_img = ri.InputImages(train_image_dir, index, "jpg")
-list_images = read_img.get_data()
+num_image = 2
+
+while num_image <= 10000:
+    image = read_img.get_data(num_image)
+    print("Load Image : "+str(num_image))
+    num_image = num_image + 1
 
