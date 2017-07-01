@@ -38,7 +38,6 @@ while batch < N_MAX_BATCH:
 
 batch_test = 0
 
-
 output = []
 name_images = []
 while batch_test < N_MAX_BATCH:

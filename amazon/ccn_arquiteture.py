@@ -8,8 +8,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras.layers.advanced_activations import PReLU
 from keras import optimizers
 from sklearn.model_selection import KFold
-from sklearn.model_selection import train_test_split
-from keras.preprocessing.image import ImageDataGenerator
+
 
 import os
 
@@ -20,6 +19,7 @@ class ConvNet(object):
 
         model = Sequential()
         model.add(BatchNormalization(input_shape=(64, 64, 3)))
+
         model.add(Conv2D(32, kernel_size=(3, 3), padding='same', activation='relu'))
         model.add(Conv2D(32, (3, 3), activation='relu'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -42,7 +42,6 @@ class ConvNet(object):
 
         model.add(Flatten())
         model.add(Dense(512, activation='relu'))
-        model.add(PReLU())
         model.add(BatchNormalization())
         model.add(Dropout(0.5))
         model.add(Dense(17, activation='sigmoid'))
@@ -65,7 +64,7 @@ class ConvNet(object):
             model = self.model_arquiteture()
 
             epochs_arr = [20, 5, 5]
-            learn_rates = [0.002, 0.0002, 0.00002]
+            learn_rates = [0.001, 0.0001, 0.00001]
 
             for learn_rate, epochs in zip(learn_rates, epochs_arr):
                 opt = optimizers.Nadam(lr=learn_rate)
