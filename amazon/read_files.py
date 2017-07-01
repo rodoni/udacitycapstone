@@ -44,14 +44,17 @@ class InputImagesTrain(object):
         for f, tags in tqdm(train_file.values[start_image:last_image], miniters=1000):
 
             img = cv2.imread('{}{}.jpg'.format(self.path, f))
+            img = cv2.resize(img, (self.resize_w, self.resize_h))
             targets = np.zeros(17)
             for t in tags.split(' '):
                 targets[com_variables.label_map[t]] = 1
-            x_images.append(cv2.resize(img, (self.resize_w, self.resize_h)))
+            x_images.append(img)
             y_labels.append(targets)
 
         y_labels = np.array(y_labels, np.uint8)
-        x_images = np.array(x_images, np.float32) / 255.
+        x_images = np.array(x_images)
+        x_images = np.subtract(np.mean(x_images, axis=0), x_images)           # zero-center
+        x_images /= np.std(x_images, axis=0)                                  # normalize
 
         return x_images, y_labels
 
@@ -89,13 +92,17 @@ class InputImagesTest(object):
         y_labels = []
 
         test_file = pd.DataFrame(self.test_file)
+        com_variables = cm.CommonsVariables()
 
         for f, tags in tqdm(test_file.values[start_image:last_image], miniters=1000):
 
             img = cv2.imread('{}{}.jpg'.format(self.path, f))
-            x_images.append(cv2.resize(img, (self.resize_w, self.resize_h)))
+            img = cv2.resize(img, (self.resize_w, self.resize_h))
+            x_images.append(img)
             y_labels.append(f)
 
-        x_images = np.array(x_images, np.float32) / 255.
+        x_images = np.array(x_images)
+        x_images = np.subtract(np.mean(x_images, axis=0), x_images)           # zero-center
+        x_images /= np.std(x_images, axis=0)                                  # normalize
 
         return x_images, y_labels
