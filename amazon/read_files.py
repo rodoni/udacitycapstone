@@ -50,21 +50,13 @@ class InputImagesTrain(object):
                 targets[com_variables.label_map[t]] = 1
             x_images.append(img)
             y_labels.append(targets)
-            img = cv2.flip(img, 0)  # flip vertically
-            x_images.append(img)
-            y_labels.append(targets)
-            img = cv2.flip(img, 1)  # flip horizontally
-            x_images.append(img)
-            y_labels.append(targets)
-            img = cv2.flip(img, 0)  # flip vertically
-            x_images.append(img)
+            x_images.append(cv2.flip(img, 1))
             y_labels.append(targets)
 
         y_labels = np.array(y_labels, np.uint8)
         x_images = np.array(x_images)
         x_images = np.subtract(np.mean(x_images, axis=0), x_images)           # zero-center
         x_images /= np.std(x_images, axis=0)                                  # normalize
-
 
         return x_images, y_labels
 

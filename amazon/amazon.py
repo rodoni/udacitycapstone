@@ -31,6 +31,7 @@ batch = 0
 while batch < N_MAX_BATCH:
 
     x_train, y_train = data_image.get_data_image(batch)
+    print(x_train.shape)
     c_net = cnn.ConvNet()
     model = Sequential()
     model = c_net.neural_net_train(x_train, y_train, 5)
