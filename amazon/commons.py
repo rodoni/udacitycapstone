@@ -1,3 +1,5 @@
+import cv2
+import numpy as np
 
 class CommonsVariables(object):
 
@@ -38,7 +40,19 @@ class CommonsVariables(object):
                  'water': 15}
 
     thres = [0.07, 0.17, 0.2, 0.04, 0.23, 0.33, 0.24, 0.22, 0.1, 0.19, 0.23, 0.24, 0.12, 0.14, 0.25, 0.26, 0.16]
-    #thres = [0.2, 0.15, 0.2, 0.45, 0.23, 0.33, 0.24, 0.22, 0.1, 0.19, 0.8, 0.24, 0.12, 0.14, 0.25, 0.4, 0.16]
+
+    def satured_image_color(self, img, s_factor):
+
+        img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        img_hsv = img_hsv.astype("float32")
+        #modify saturation
+        (h, s, v) = cv2.split(img_hsv)
+        s = s*s_factor
+        s = np.clip(s, 0, 255)
+        img_hsv_s = cv2.merge([h, s, v])
+        img_rgb_s = cv2.cvtColor(img_hsv_s.astype("uint8"), cv2.COLOR_HSV2BGR)
+
+        return img_rgb_s
 
 
 

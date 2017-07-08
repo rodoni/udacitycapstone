@@ -17,15 +17,9 @@ df_train = pd.read_csv('D:/DataSet/Amazon/train.csv')
 df_test = pd.read_csv('D:/DataSet/Amazon/sample_submission.csv')
 
 
-flatten = lambda l: [item for sublist in l for item in sublist]
-labels = list(set(flatten([l.split(' ') for l in df_train['tags'].values])))
-
-
 com_variables = cm.CommonsVariables()
 data_image = rf.InputImagesTrain('C:/DataSet/Amazon/train/', MAX_IMAGES_TO_TRAIN, 64, 64, df_train, N_MAX_BATCH)
 data_test = rf.InputImagesTest('C:/DataSet/Amazon/test/', MAX_IMAGES_TO_TEST, 64, 64, df_test, N_MAX_BATCH)
-
-
 
 batch = 0
 while batch < N_MAX_BATCH:
@@ -33,8 +27,7 @@ while batch < N_MAX_BATCH:
     x_train, y_train = data_image.get_data_image(batch)
     print(x_train.shape)
     c_net = cnn.ConvNet()
-    model = Sequential()
-    model = c_net.neural_net_train(x_train, y_train, 5)
+    c_net.neural_net_train(x_train, y_train, 5)
     batch = batch + 1
 
 batch_test = 0

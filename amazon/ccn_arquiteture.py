@@ -7,6 +7,8 @@ from keras.layers import Conv2D, MaxPooling2D
 from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras import optimizers
 from sklearn.model_selection import KFold
+from sklearn.metrics import fbeta_score
+from keras.preprocessing.image import ImageDataGenerator
 
 
 import os
@@ -19,28 +21,28 @@ class ConvNet(object):
         model = Sequential()
         model.add(BatchNormalization(input_shape=(64, 64, 3)))
 
-        model.add(Conv2D(32, kernel_size=(3, 3), padding='same', activation='relu'))
-        model.add(Conv2D(32, (3, 3), activation='relu'))
+        model.add(Conv2D(32, kernel_size=(3, 3), padding='same', activation='relu', kernel_initializer='glorot_uniform'))
+        model.add(Conv2D(32, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
-        model.add(Conv2D(64, kernel_size=(3, 3), padding='same', activation='relu'))
-        model.add(Conv2D(64, (3, 3), activation='relu'))
+        model.add(Conv2D(64, kernel_size=(3, 3), padding='same', activation='relu',kernel_initializer='glorot_uniform'))
+        model.add(Conv2D(64, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
-        model.add(Conv2D(128, kernel_size=(3, 3), padding='same', activation='relu'))
-        model.add(Conv2D(128, (3, 3), activation='relu'))
+        model.add(Conv2D(128, kernel_size=(3, 3), padding='same', activation='relu',kernel_initializer='glorot_uniform'))
+        model.add(Conv2D(128, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
-        model.add(Conv2D(256, kernel_size=(3, 3), padding='same', activation='relu'))
-        model.add(Conv2D(256, (3, 3), activation='relu'))
+        model.add(Conv2D(256, kernel_size=(3, 3), padding='same', activation='relu',kernel_initializer='glorot_uniform'))
+        model.add(Conv2D(256, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
         model.add(Flatten())
-        model.add(Dense(512, activation='relu'))
+        model.add(Dense(512, activation='relu',kernel_initializer='glorot_uniform'))
         model.add(BatchNormalization())
         model.add(Dropout(0.5))
         model.add(Dense(17, activation='sigmoid'))
@@ -53,7 +55,6 @@ class ConvNet(object):
         fold = 0
 
         x_train = np.array(x_train)
-        print(x_train.shape)
 
         for train_index, test_index in kf.split(x_train):
 
@@ -74,7 +75,9 @@ class ConvNet(object):
                           batch_size=128, verbose=2, epochs=epochs, callbacks=callbacks,
                           shuffle=True)
 
-        return model
+                p_valid = model.predict(x_train[test_index], batch_size=128)
+                fb_score = fbeta_score(y_train[test_index], np.array(p_valid) > 0.2, beta=2, average='samples')
+                print('Fbeta Score  KFold number {} from {} : {}'.format(fold, n_folds, fb_score))
 
     def neural_net_predict_fold(self, x_test, n_folds):
 
@@ -113,3 +116,6 @@ class ConvNet(object):
         output.extend(p_test)
 
         return output
+
+
+

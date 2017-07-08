@@ -40,18 +40,27 @@ class InputImagesTrain(object):
 
         train_file = pd.DataFrame(self.train_file)
         com_variables = cm.CommonsVariables()
+        s_factor = 1.5
 
         for f, tags in tqdm(train_file.values[start_image:last_image], miniters=1000):
 
             img = cv2.imread('{}{}.jpg'.format(self.path, f))
+            img = com_variables.satured_image_color(img, s_factor)
             img = cv2.resize(img, (self.resize_w, self.resize_h))
             targets = np.zeros(17)
             for t in tags.split(' '):
                 targets[com_variables.label_map[t]] = 1
             x_images.append(img)
             y_labels.append(targets)
-            x_images.append(cv2.flip(img, 1))
+            img = cv2.flip(img, 0)  # flip vertically
+            x_images.append(img)
             y_labels.append(targets)
+            #img = cv2.flip(img, 1)  # flip vertically
+            #x_images.append(img)
+            #y_labels.append(targets)
+            #img = cv2.flip(img, 0)  # flip vertically
+            #x_images.append(img)
+            #y_labels.append(targets)
 
         y_labels = np.array(y_labels, np.uint8)
         x_images = np.array(x_images)
@@ -92,6 +101,7 @@ class InputImagesTest(object):
 
         x_images = []
         y_labels = []
+        s_factor = 1.5
 
         test_file = pd.DataFrame(self.test_file)
         com_variables = cm.CommonsVariables()
@@ -99,6 +109,7 @@ class InputImagesTest(object):
         for f, tags in tqdm(test_file.values[start_image:last_image], miniters=1000):
 
             img = cv2.imread('{}{}.jpg'.format(self.path, f))
+            img = com_variables.satured_image_color(img, s_factor)
             img = cv2.resize(img, (self.resize_w, self.resize_h))
             x_images.append(img)
             y_labels.append(f)
