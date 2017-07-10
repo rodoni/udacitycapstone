@@ -39,9 +39,13 @@ class CommonsVariables(object):
                  'slash_burn': 8,
                  'water': 15}
 
-    thres = [0.07, 0.17, 0.2, 0.04, 0.23, 0.33, 0.24, 0.22, 0.1, 0.19, 0.23, 0.24, 0.12, 0.14, 0.25, 0.26, 0.16]
-
     def satured_image_color(self, img, s_factor):
+
+        """
+        :param img: img in numpy matrix
+        :param s_factor: multiplication factor for saturation
+        :return: 
+        """
 
         img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         img_hsv = img_hsv.astype("float32")

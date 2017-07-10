@@ -1,26 +1,43 @@
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
-from keras.models import Sequential
-
 import read_files as rf
-import ccn_arquiteture as cnn
+import cnn_arquiteture as cnn
 import commons as cm
+import sys
 
-x_train = []
-x_test = []
-y_train = []
+# global variables
 N_MAX_BATCH = 1
 MAX_IMAGES_TO_TRAIN = 40478
 MAX_IMAGES_TO_TEST = 61191
+IMAGE_RES = [64, 64]
 
-df_train = pd.read_csv('D:/DataSet/Amazon/train.csv')
-df_test = pd.read_csv('D:/DataSet/Amazon/sample_submission.csv')
+# check input variable
+if len(sys.argv) < 1:
+    print('Please put the arguments <path_to_data_set>')
+    exit(1)
+else:
 
+    if sys.argv[1] == "--help":
+        print('Please use the the follow syntax: script <path_to_data_set>')
+        exit(0)
 
+data_set_path = sys.argv[1]
+
+train_file = data_set_path+"train.csv"
+test_file = data_set_path+"sample_submission.csv"
+
+train_path = data_set_path+"train/"
+test_path = data_set_path+"test"
+
+df_train = pd.read_csv(train_file)
+df_test = pd.read_csv(test_file)
+
+# load images
 com_variables = cm.CommonsVariables()
-data_image = rf.InputImagesTrain('C:/DataSet/Amazon/train/', MAX_IMAGES_TO_TRAIN, 64, 64, df_train, N_MAX_BATCH)
-data_test = rf.InputImagesTest('C:/DataSet/Amazon/test/', MAX_IMAGES_TO_TEST, 64, 64, df_test, N_MAX_BATCH)
+data_image = rf.InputImagesTrain(train_path, MAX_IMAGES_TO_TRAIN, IMAGE_RES[0], IMAGE_RES[1], df_train, N_MAX_BATCH)
+data_test = rf.InputImagesTest(test_path, MAX_IMAGES_TO_TEST, IMAGE_RES[0], IMAGE_RES[1], df_test, N_MAX_BATCH)
 
+# train loop
 batch = 0
 while batch < N_MAX_BATCH:
 
@@ -30,8 +47,8 @@ while batch < N_MAX_BATCH:
     c_net.neural_net_train(x_train, y_train, 5)
     batch = batch + 1
 
+# prediction loop
 batch_test = 0
-
 output = []
 name_images = []
 while batch_test < N_MAX_BATCH:
@@ -44,10 +61,9 @@ while batch_test < N_MAX_BATCH:
 
 output = np.array(output)
 data_result = pd.DataFrame(output, columns=com_variables.labels)
-
 file_result = pd.DataFrame(index=range(MAX_IMAGES_TO_TEST), columns=['image_name', 'tags'])
 
-
+# creating submission file to kaggle
 for i in range(data_result.shape[0]):
     data = data_result.ix[[i]]
     data = data.apply(lambda x: x > 0.2, axis=1)

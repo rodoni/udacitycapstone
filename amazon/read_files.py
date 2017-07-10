@@ -55,12 +55,6 @@ class InputImagesTrain(object):
             img = cv2.flip(img, 0)  # flip vertically
             x_images.append(img)
             y_labels.append(targets)
-            #img = cv2.flip(img, 1)  # flip vertically
-            #x_images.append(img)
-            #y_labels.append(targets)
-            #img = cv2.flip(img, 0)  # flip vertically
-            #x_images.append(img)
-            #y_labels.append(targets)
 
         y_labels = np.array(y_labels, np.uint8)
         x_images = np.array(x_images)

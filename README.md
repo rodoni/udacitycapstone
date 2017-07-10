@@ -1,8 +1,9 @@
 # README
 
-This code has a intention to be a test to a capstone project before submit everything. This is just to known if the idea
-will fit well. The intention is create a RNN to compare two questions from Quora to verify if both has the same meaning
-or not.
+This ṕython script is a part of capstone proposal to submitted for Udacity, 
+in this script was resolved a classification problem using Convolutional Neural
+Network applied for a set of satellite images from Amazon forest, this was a Kaggle
+competition named Planet: Understanding the Amazon from Space.
 
 Requirements:
 
@@ -14,3 +15,6 @@ _Pandas_
 
 _TensorFlow_ _1.1.0_
 
+_Keras_ _2.0_
+
+_Scikit-learn_ _0.18_

@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.metrics import fbeta_score
 from keras.layers.normalization import BatchNormalization
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
@@ -8,15 +7,17 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from keras import optimizers
 from sklearn.model_selection import KFold
 from sklearn.metrics import fbeta_score
-from keras.preprocessing.image import ImageDataGenerator
-
-
 import os
 
 
 class ConvNet(object):
 
+    @staticmethod
     def model_arquiteture(self):
+
+        """
+        :return: CCN Model
+        """
 
         model = Sequential()
         model.add(BatchNormalization(input_shape=(64, 64, 3)))
@@ -51,6 +52,13 @@ class ConvNet(object):
 
     def neural_net_train(self, x_train, y_train, n_folds):
 
+        """
+        :param x_train: matrix of images to train
+        :param y_train: labels 
+        :param n_folds: number of folds 
+        :return: 
+        """
+
         kf = KFold(n_splits=n_folds, shuffle=True, random_state=1)
         fold = 0
 
@@ -81,6 +89,12 @@ class ConvNet(object):
 
     def neural_net_predict_fold(self, x_test, n_folds):
 
+        """
+        :param x_test: matrix of images to predict
+        :param n_folds: number of folds , must be the same used in neural_net_train
+        :return: matrix with mean of all folds 
+        """
+
         num_fold = 0
         all_test = []
 
@@ -101,21 +115,4 @@ class ConvNet(object):
         mean /= n_folds
 
         return mean
-
-    def neural_net_predict(self, x_test, last_batch):
-
-        output = []
-        kfold_weights_path = os.path.join('', 'weights_kfold_' + str(last_batch) + '.h5')
-
-        model = self.model_arquiteture()
-
-        if os.path.isfile(kfold_weights_path):
-            model.load_weights(kfold_weights_path)
-
-        p_test = model.predict(x_test, batch_size=128, verbose=2)
-        output.extend(p_test)
-
-        return output
-
-
 
