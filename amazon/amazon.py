@@ -11,23 +11,21 @@ MAX_IMAGES_TO_TRAIN = 40478
 MAX_IMAGES_TO_TEST = 61191
 IMAGE_RES = [64, 64]
 
+
+data_set_path = ""
+
 # check input variable
-if len(sys.argv) < 1:
-    print('Please put the arguments <path_to_data_set>')
-    exit(1)
+if len(sys.argv) > 1:
+    data_set_path = sys.argv[1]
 else:
-
-    if sys.argv[1] == "--help":
-        print('Please use the the follow syntax: script <path_to_data_set>')
-        exit(0)
-
-data_set_path = sys.argv[1]
+    print('Please use the the follow syntax: script <path_to_data_set>')
+    exit(0)
 
 train_file = data_set_path+"train.csv"
 test_file = data_set_path+"sample_submission.csv"
 
 train_path = data_set_path+"train/"
-test_path = data_set_path+"test"
+test_path = data_set_path+"test/"
 
 df_train = pd.read_csv(train_file)
 df_test = pd.read_csv(test_file)
@@ -39,25 +37,23 @@ data_test = rf.InputImagesTest(test_path, MAX_IMAGES_TO_TEST, IMAGE_RES[0], IMAG
 
 # train loop
 batch = 0
-while batch < N_MAX_BATCH:
+x_train, y_train = data_image.get_data_image(batch)
+print(x_train.shape)
+c_net = cnn.ConvNet()
+threshold = c_net.neural_net_train(x_train, y_train, 5)
+batch = batch + 1
 
-    x_train, y_train = data_image.get_data_image(batch)
-    print(x_train.shape)
-    c_net = cnn.ConvNet()
-    c_net.neural_net_train(x_train, y_train, 5)
-    batch = batch + 1
 
 # prediction loop
 batch_test = 0
 output = []
 name_images = []
-while batch_test < N_MAX_BATCH:
 
-    x_test, y_label = data_test.get_data_image(batch_test)
-    name_images.extend(y_label)
-    c_net = cnn.ConvNet()
-    output.extend(c_net.neural_net_predict_fold(x_test, 5))
-    batch_test = batch_test + 1
+x_test, y_label = data_test.get_data_image(batch_test)
+name_images.extend(y_label)
+c_net = cnn.ConvNet()
+output.extend(c_net.neural_net_predict_fold(x_test, 5))
+batch_test = batch_test + 1
 
 output = np.array(output)
 data_result = pd.DataFrame(output, columns=com_variables.labels)
@@ -75,7 +71,7 @@ for i in range(data_result.shape[0]):
 
 
 file_result.to_csv('submission_keras.csv', index=False)
-data_result.to_csv('submission_values.csv', index=False)
+data_result.to_csv('data_result.csv', index=False)
 
 
 exit(0)

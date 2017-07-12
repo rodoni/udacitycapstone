@@ -13,7 +13,7 @@ import os
 class ConvNet(object):
 
     @staticmethod
-    def model_arquiteture(self):
+    def model_arquiteture():
 
         """
         :return: CCN Model
@@ -63,6 +63,7 @@ class ConvNet(object):
         fold = 0
 
         x_train = np.array(x_train)
+        thresholds_list = []
 
         for train_index, test_index in kf.split(x_train):
 
@@ -80,12 +81,25 @@ class ConvNet(object):
                 callbacks = [EarlyStopping(monitor='val_loss', patience=2, verbose=0),
                              ModelCheckpoint(kfold_weights_path, monitor='val_loss', save_best_only=True, verbose=0)]
                 model.fit(x=x_train[train_index], y=y_train[train_index], validation_data=(x_train[test_index], y_train[test_index]),
-                          batch_size=128, verbose=2, epochs=epochs, callbacks=callbacks,
-                          shuffle=True)
+                          batch_size=64, verbose=2, epochs=epochs, callbacks=callbacks, shuffle=True)
 
-                p_valid = model.predict(x_train[test_index], batch_size=128)
-                fb_score = fbeta_score(y_train[test_index], np.array(p_valid) > 0.2, beta=2, average='samples')
-                print('Fbeta Score  KFold number {} from {} : {}'.format(fold, n_folds, fb_score))
+            p_valid = model.predict(x_train[test_index], batch_size=64)
+            thresholds = self.optimise_f2_thresholds(np.array(y_train[test_index]), np.array(p_valid), verbose=False,
+                                                     resolution=2000)
+            thresholds_list.append(thresholds)
+            fb_score = fbeta_score(np.array(y_train[test_index]), np.array(p_valid) > thresholds, beta=2, average='samples')
+
+            print('Fbeta Score  KFold number {} from {} : {}'.format(fold, n_folds, fb_score))
+            print('Threshold: {}'.format(thresholds))
+
+        t_mean = np.array(thresholds_list[0])
+        for i in range(1, n_folds):
+            t_mean += np.array(thresholds_list[i])
+        t_mean /= n_folds
+
+        print(t_mean)
+
+        return t_mean
 
     def neural_net_predict_fold(self, x_test, n_folds):
 
@@ -115,4 +129,30 @@ class ConvNet(object):
         mean /= n_folds
 
         return mean
+
+    @staticmethod
+    def optimise_f2_thresholds(y, p, verbose=True, resolution=2000):
+        def mf(x):
+            p2 = np.zeros_like(p)
+            for i in range(17):
+                p2[:, i] = (p[:, i] > x[i]).astype(np.int)
+            score = fbeta_score(y, p2, beta=2, average='samples')
+            return score
+
+        x = [0.2] * 17
+        for i in range(17):
+            best_i2 = 0
+            best_score = 0
+            for i2 in range(resolution):
+                i2 /= resolution
+                x[i] = i2
+                score = mf(x)
+                if score > best_score:
+                    best_i2 = i2
+                    best_score = score
+            x[i] = best_i2
+            if verbose:
+                print(i, best_i2, best_score)
+
+        return x
 
