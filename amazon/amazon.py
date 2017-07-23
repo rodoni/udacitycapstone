@@ -19,7 +19,7 @@ if len(sys.argv) > 1:
     data_set_path = sys.argv[1]
 else:
     print('Please use the the follow syntax: script <path_to_data_set>')
-    exit(0)
+    exit(1)
 
 train_file = data_set_path+"train.csv"
 test_file = data_set_path+"sample_submission.csv"
@@ -62,7 +62,7 @@ file_result = pd.DataFrame(index=range(MAX_IMAGES_TO_TEST), columns=['image_name
 # creating submission file to kaggle
 for i in range(data_result.shape[0]):
     data = data_result.ix[[i]]
-    data = data.apply(lambda x: x > 0.2, axis=1)
+    data = data.apply(lambda x: x > 0.23, axis=1)
     data = data.transpose()
     data = data.loc[data[i] == True]
     ' '.join(list(data.index))
