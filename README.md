@@ -21,8 +21,14 @@ _Keras_ _2.0_
 _Scikit-learn_ _0.18_
 
 
-Command to run the scripts:
+Commands:
+
+To training the entire dataset an predict and create the csv file
 
 python amazon.py <path_to_dataset>
 
 Ex:.  python amazon.py /home/user/DataSet/Amazon/
+
+To only predicut and create the csv file, but is necessary weights files
+
+python amazon.py <path_to_dataset> --only-predict
