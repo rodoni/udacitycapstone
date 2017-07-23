@@ -1,5 +1,5 @@
-import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+import numpy as np
+import pandas as pd
 import read_files as rf
 import cnn_arquiteture as cnn
 import commons as cm
@@ -13,10 +13,18 @@ IMAGE_RES = [64, 64]
 
 
 data_set_path = ""
+train_and_predict = True
+
 
 # check input variable
 if len(sys.argv) > 1:
     data_set_path = sys.argv[1]
+    if len(sys.argv) == 3:
+        if sys.argv[2] == '--only-predict':
+            print('If will search by weights of one pre-trained network')
+            train_and_predict = False
+
+
 else:
     print('Please use the the follow syntax: script <path_to_data_set>')
     exit(1)
@@ -36,12 +44,14 @@ data_image = rf.InputImagesTrain(train_path, MAX_IMAGES_TO_TRAIN, IMAGE_RES[0], 
 data_test = rf.InputImagesTest(test_path, MAX_IMAGES_TO_TEST, IMAGE_RES[0], IMAGE_RES[1], df_test, N_MAX_BATCH)
 
 # train loop
-batch = 0
-x_train, y_train = data_image.get_data_image(batch)
-print(x_train.shape)
-c_net = cnn.ConvNet()
-threshold = c_net.neural_net_train(x_train, y_train, 5)
-batch = batch + 1
+if train_and_predict:
+    print('Training ...')
+    batch = 0
+    x_train, y_train = data_image.get_data_image(batch)
+    print(x_train.shape)
+    c_net = cnn.ConvNet()
+    threshold = c_net.neural_net_train(x_train, y_train, 5)
+
 
 
 # prediction loop
@@ -49,6 +59,7 @@ batch_test = 0
 output = []
 name_images = []
 
+print('Predicting ...')
 x_test, y_label = data_test.get_data_image(batch_test)
 name_images.extend(y_label)
 c_net = cnn.ConvNet()
@@ -60,6 +71,7 @@ data_result = pd.DataFrame(output, columns=com_variables.labels)
 file_result = pd.DataFrame(index=range(MAX_IMAGES_TO_TEST), columns=['image_name', 'tags'])
 
 # creating submission file to kaggle
+print('Creating file to submission ...')
 for i in range(data_result.shape[0]):
     data = data_result.ix[[i]]
     data = data.apply(lambda x: x > 0.23, axis=1)
