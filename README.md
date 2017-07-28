@@ -1,6 +1,6 @@
 # README
 
-This ṕython script is a part of capstone proposal to submitted for Udacity, 
+This Python script is a part of capstone proposal to submitted for Udacity,
 in this script was resolved a classification problem using Convolutional Neural
 Network applied for a set of satellite images from Amazon forest, this was a Kaggle
 competition named Planet: Understanding the Amazon from Space.

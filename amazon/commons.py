@@ -47,10 +47,10 @@ class CommonsVariables(object):
         :param s_factor: multiplication factor for saturation
         :return: 
         """
-
+        # load file in hsv format
         img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
         img_hsv = img_hsv.astype("float32")
-        #modify saturation
+        # modify saturation
         (h, s, v) = cv2.split(img_hsv)
         s = s*s_factor
         s = np.clip(s, 0, 255)

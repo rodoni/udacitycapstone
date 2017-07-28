@@ -12,6 +12,7 @@ import os
 
 class ConvNet(object):
 
+
     @staticmethod
     def model_arquiteture():
 
@@ -22,26 +23,31 @@ class ConvNet(object):
         model = Sequential()
         model.add(BatchNormalization(input_shape=(64, 64, 3)))
 
+        # Conv Layer with Max Pooling and Dropout
         model.add(Conv2D(32, kernel_size=(3, 3), padding='same', activation='relu', kernel_initializer='glorot_uniform'))
         model.add(Conv2D(32, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
+        # Conv Layer with Max Pooling and Dropout
         model.add(Conv2D(64, kernel_size=(3, 3), padding='same', activation='relu',kernel_initializer='glorot_uniform'))
         model.add(Conv2D(64, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
+        # Conv Layer with Max Pooling and Dropout
         model.add(Conv2D(128, kernel_size=(3, 3), padding='same', activation='relu',kernel_initializer='glorot_uniform'))
         model.add(Conv2D(128, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
+        # Conv Layer with Max Pooling and Dropout
         model.add(Conv2D(256, kernel_size=(3, 3), padding='same', activation='relu',kernel_initializer='glorot_uniform'))
         model.add(Conv2D(256, (3, 3), activation='relu',kernel_initializer='glorot_uniform'))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(0.25))
 
+        # Flatten follow by two Fully Connected Layers
         model.add(Flatten())
         model.add(Dense(512, activation='relu',kernel_initializer='glorot_uniform'))
         model.add(BatchNormalization())
@@ -56,9 +62,10 @@ class ConvNet(object):
         :param x_train: matrix of images to train
         :param y_train: labels 
         :param n_folds: number of folds 
-        :return: 
+        :return: thresholds
         """
 
+        # Create folds
         kf = KFold(n_splits=n_folds, shuffle=True, random_state=1)
         fold = 0
 
@@ -66,6 +73,7 @@ class ConvNet(object):
         thresholds_list = []
         fb_score_list = []
 
+        # Kfold loop
         for train_index, test_index in kf.split(x_train):
 
             fold += 1
@@ -77,6 +85,8 @@ class ConvNet(object):
             epochs_arr = [20, 5, 5]
             learn_rates = [0.001, 0.0001, 0.00001]
 
+            # Training loop
+
             for learn_rate, epochs in zip(learn_rates, epochs_arr):
                 opt = optimizers.Nadam(lr=learn_rate)
                 model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'])
@@ -86,10 +96,12 @@ class ConvNet(object):
                           batch_size=64, verbose=2, epochs=epochs, callbacks=callbacks, shuffle=True)
                 history_array.append(hst)
 
+            # Evaluate training with predict
             p_valid = model.predict(x_train[test_index], batch_size=64)
             thresholds = self.optimise_f2_thresholds(np.array(y_train[test_index]), np.array(p_valid), verbose=False,
                                                      resolution=100)
             thresholds_list.append(thresholds)
+            # Evaluate results with F-Score
             fb_score = fbeta_score(np.array(y_train[test_index]), np.array(p_valid) > thresholds, beta=2, average='samples')
             fb_score_list.append(fb_score)
 
@@ -115,6 +127,8 @@ class ConvNet(object):
         num_fold = 0
         all_test = []
 
+        # Loop the folds and load file by file created in a training step
+
         for i in range(n_folds):
             num_fold += 1
             kfold_weights_path = os.path.join('', 'weights_kfold_' + str(i) + '.h5')
@@ -125,7 +139,7 @@ class ConvNet(object):
             test = model.predict(x_test.astype('float32'), batch_size=128, verbose=2)
             all_test.append(test)
 
-        # merge all folds
+        # Merge all folds
         mean = np.array(all_test[0])
         for i in range(1, n_folds):
             mean += np.array(all_test[i])
